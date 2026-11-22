@@ -1,0 +1,25 @@
+# Python キャッシュ・仮想環境
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.uv/
+
+# Streamlit 設定・ローカルキャッシュ
+.streamlit/secrets.toml
+
+# ローカルの気象データ・一時出力ファイル
+data/*.parquet
+data/*.csv
+outputs/
+*.png
+*.jpg
+*.parquet
+
+# OS・エディタ固有ファイル
+.DS_Store
+.ipynb_checkpoints/
+.vscode/
+.idea/

@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+matplotlib
+requests
+beautifulsoup4
+lxml
+pyarrow
+duckdb
+polars
+git+https://github.com/takumi3682/meteo_lib.git
