@@ -67,17 +67,22 @@ WIND_DIR_DICT = {
 # ==============================================================================
 # ユーティリティ関数
 # ==============================================================================
+# リポジトリ内の data/地点コード.csv を指す（無ければ None でデフォルトにフォールバック）
+APP_ROOT = Path(__file__).resolve().parent
+LOCAL_AMD_CSV = APP_ROOT / "data" / "地点コード.csv"
+AMD_CSV_PATH = str(LOCAL_AMD_CSV) if LOCAL_AMD_CSV.exists() else None
+
+
 @st.cache_data
 def get_station_catalog() -> dict[str, list[str]]:
     """都道府県名 -> 地点名リスト の辞書を作成"""
-    amd_df = cv4._load_amd_list()
+    amd_df = cv4._load_amd_list(path=AMD_CSV_PATH)
     catalog: dict[str, list[str]] = {}
     for pref_name, prec_no in cv4.prec_list.items():
         places = amd_df.loc[amd_df["prec_no"] == prec_no, "Name"].dropna().tolist()
         if places:
             catalog[pref_name] = places
     return catalog
-
 
 def to_jst_naive(s: pd.Series) -> pd.Series:
     """
@@ -597,7 +602,11 @@ if pd.to_datetime(start_dt_str) >= pd.to_datetime(end_dt_str):
     st.error("終了日時は開始日時より後に設定してください。")
     st.stop()
 
-station = cv4.get_station(pref=selected_pref, place=selected_place)
+station = cv4.get_station(
+    pref=selected_pref,
+    place=selected_place,
+    amd_list_path=AMD_CSV_PATH,
+)
 if station is None:
     st.error(f"地点情報が見つかりませんでした: {selected_pref} {selected_place}")
     st.stop()
